@@ -13,11 +13,11 @@ public class MyGdxGame extends Game {
 	 */
 	public SpriteBatch batch;
 	public Pantalla personaje;
-	//public Pantalla animacion;
+	public Pantalla animacion;
 	//public Pantalla auto;
 	//public Pantalla camera;
 	//public Pantalla scene;
-  //  public Pantalla ui;
+ //   public Pantalla ui;
 
 	@Override
 	public void create() {
@@ -26,14 +26,14 @@ public class MyGdxGame extends Game {
 		
 		// Creamos las pantallas
 		personaje = new PantallaPersonaje(this);
-		//animacion = new PantallaAnimation(this);
+		animacion = new PantallaAnimation(this);
 		/*auto = new PantallaAuto(this);
 		camera = new PantallaCamera(this);
-		scene = new PantallaScene(this);
-        ui = new PantallaUI(this);
-		
+		scene = new PantallaScene(this);		
 		// Hoy nos interesa esta pantalla.*/
 		setScreen(personaje);
+		//setScreen(animacion);
+
 	}
 }
 
