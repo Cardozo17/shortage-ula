@@ -1,5 +1,44 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+public class MyGdxGame extends Game {
+	
+	/**
+	 * SpriteBatch. Es un poco absurdo crear uno para cada pantalla, lo
+	 * dejamos aquí y que las pantallas accedan a éste. Un poco sucio por
+	 * mi parte dejarlo public pero paso de crear un getter en este momento
+	 * (aunque sería lo suyo, por ejemplo para evitar que se pueda modificar)
+	 */
+	public SpriteBatch batch;
+	public Pantalla personaje;
+	//public Pantalla animacion;
+	//public Pantalla auto;
+	//public Pantalla camera;
+	//public Pantalla scene;
+  //  public Pantalla ui;
+
+	@Override
+	public void create() {
+		// Creamos algunas cosas sencillas...
+		batch = new SpriteBatch();
+		
+		// Creamos las pantallas
+		personaje = new PantallaPersonaje(this);
+		//animacion = new PantallaAnimation(this);
+		/*auto = new PantallaAuto(this);
+		camera = new PantallaCamera(this);
+		scene = new PantallaScene(this);
+        ui = new PantallaUI(this);
+		
+		// Hoy nos interesa esta pantalla.*/
+		setScreen(personaje);
+	}
+}
+
+/*package com.mygdx.game;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -51,4 +90,4 @@ public class MyGdxGame extends ApplicationAdapter {
 	personaje.setPosition(x, y);
 	
 	}
-}
+}*/
