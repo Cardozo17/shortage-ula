@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" nextobjectid="1">
+ <tileset firstgid="1" name="tileset" tilewidth="32" tileheight="32">
+  <image source="tileset.png" width="512" height="512"/>
+ </tileset>
+ <layer name="Capa de Patrones 1" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt2NEJwjAUQNFuoBvoBrqBLiB2g3b/KUzBB4+AWFDSQM/HoU3tR8ilKXYchmFc4VAcV97L755fxqfi3ME89yCv/Vz9FuNLce1grnsQPea0/nM1tl+17VE3WcZTGtuv2pmqtY9G+VrsV/V7hf+LNZ7Sed0j9is92vcIucfjTY82PWL941jvYXq07RFrn7uM6boe2/SI50KP7eR9KT8neuiBHr351CO/V5YWVz2a9ohjXMs94v9gvodtOi3nvl/1xff2vtyKewfzAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAtvADe2TZB
+  </data>
+ </layer>
+ <layer name="Capa de patrones 2" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJzt0TdKRVEUhtEzK8MEDBMwVLcz9DoDnY7OwFhpZai0MFYKgq2C+DdXLM4Lgvc90LXgg7NPtWHvlFJ200SaTFNpujK3DtJhOkrHqRkQP7OX9tNMmk1zab4yt87SebpIl2XwPZruVv+TbtJtWkiLaSktV+bWXbpPD+mxuEdXVtJqWkvrlbn1Woa7wfcYjWaI+H0vPd5NpVLcoWsfPd7wX5yk08r/RtrsM9ONq3Rd+d9K231muvGUnse9BF/e0vu4lwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABg5D4B1B08NQ==
+  </data>
+ </layer>
+ <objectgroup name="capade objetos"/>
+</map>
