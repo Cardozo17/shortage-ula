@@ -3,7 +3,9 @@ package com.shortage.pantallas;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -37,12 +39,12 @@ public class PantallaPlay extends Pantalla implements InputProcessor {
 		camara.update();
 		renderizarMapa= new OrthogonalTiledMapRenderer(mapa);
 		heroe= new Personaje();
-		
+		//Gdx.input.setInputProcessor(this);
 	}
 	
 	@Override
 	public void render(float delta){
-        Gdx.gl.glClearColor(1, 0, 0, 1);
+        Gdx.gl.glClearColor(0,128,0, 8);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		//batch.begin();
@@ -52,45 +54,44 @@ public class PantallaPlay extends Pantalla implements InputProcessor {
 		renderizarMapa.render();
 		heroe.render(delta);
 		manejoEntrada(delta);
-		seguimientoPersonaje();
 		camara.update();
 	}
 	
 	public void manejoEntrada(float delta){
 		if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-			
+			heroe.mirarDerecha();
+			heroe.estadoMoviendose();
 			//heroe.moverDerecha(delta, velocidad);
 			camara.position.set(camara.position.x+velocidad*delta, camara.position.y, camara.position.z);
 		}else
 			if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-				
+			heroe.mirarIzquierda();
+			heroe.estadoMoviendose();
 			//heroe.moverIzquierda(delta, velocidad);
-				camara.position.set(camara.position.x-velocidad*delta, camara.position.y, camara.position.z);
+			camara.position.set(camara.position.x-velocidad*delta, camara.position.y, camara.position.z);
 			}
 		
 		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
 			
+			heroe.mirarArriba();
+			heroe.estadoMoviendose();
 			//heroe.moverArriba(delta, velocidad);
 			camara.position.set(camara.position.x, camara.position.y+velocidad*delta, camara.position.z);
 		}else
 			if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-				
-			//	heroe.moverAbajo(delta, velocidad);
-				camara.position.set(camara.position.x, camara.position.y-velocidad*delta, camara.position.z);
+			heroe.mirarAbajo();
+			heroe.estadoMoviendose();
+			//heroe.moverAbajo(delta, velocidad);
+			camara.position.set(camara.position.x, camara.position.y-velocidad*delta, camara.position.z);
 			}
+	
+		if(!Gdx.input.isKeyPressed(Input.Keys.S) && !Gdx.input.isKeyPressed(Input.Keys.A) && !Gdx.input.isKeyPressed(Input.Keys.D) && !Gdx.input.isKeyPressed(Input.Keys.W) )
+		heroe.estadoQuieto();
 
 		
 	}
 	
-	public void seguimientoPersonaje(){
-		//camara.position.set(heroe.getPosX(), heroe.getPosY(), camara.position.z);
-		heroe.actualizarPosicion(camara.position.x, camara.position.y);
-	}
-	
-	
-	
-	
-	
+		
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
@@ -129,14 +130,12 @@ public class PantallaPlay extends Pantalla implements InputProcessor {
 	}
 	@Override
 	public boolean keyDown(int keycode) {
-		// TODO Auto-generated method stub
-		
 		return false;
+		
 	}
 
 	@Override
 	public boolean keyUp(int keycode) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -176,7 +175,7 @@ public class PantallaPlay extends Pantalla implements InputProcessor {
 		return false;
 	}
 
-
+	
 	
 	
 }
