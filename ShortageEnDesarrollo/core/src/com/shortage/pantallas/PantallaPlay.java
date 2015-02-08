@@ -3,27 +3,18 @@ package com.shortage.pantallas;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.physics.box2d.Shape;
 import com.shortage.entidades.Personaje;
 import com.shortage.game.Shortage;
 
-public class PantallaPlay extends Pantalla implements InputProcessor {
+public class PantallaPlay extends PantallaAbstracta implements InputProcessor {
+	
 	static final float velocidad=300;
 	private TiledMap mapa;
 	OrthographicCamera camara;
@@ -58,6 +49,7 @@ public class PantallaPlay extends Pantalla implements InputProcessor {
 	}
 	
 	public void manejoEntrada(float delta){
+		
 		if (Gdx.input.isKeyPressed(Input.Keys.D)) {
 			heroe.mirarDerecha();
 			heroe.estadoMoviendose();
@@ -94,8 +86,6 @@ public class PantallaPlay extends Pantalla implements InputProcessor {
 		
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -119,6 +109,7 @@ public class PantallaPlay extends Pantalla implements InputProcessor {
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
+		
 		
 	}
 	
