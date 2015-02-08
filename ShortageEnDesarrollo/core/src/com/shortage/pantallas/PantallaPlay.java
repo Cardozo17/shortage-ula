@@ -3,6 +3,7 @@ package com.shortage.pantallas;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -21,6 +22,7 @@ public class PantallaPlay extends PantallaAbstracta implements InputProcessor {
 	TiledMapRenderer renderizarMapa;
 	Personaje heroe;
 	SpriteBatch batch;
+	private Music musica;
 		
 	public PantallaPlay(Shortage game) {
 		super(game);
@@ -31,6 +33,9 @@ public class PantallaPlay extends PantallaAbstracta implements InputProcessor {
 		renderizarMapa= new OrthogonalTiledMapRenderer(mapa);
 		heroe= new Personaje();
 		//Gdx.input.setInputProcessor(this);
+		musica = Gdx.audio.newMusic(Gdx.files.internal("04 Cuando Pase el Temblor.mp3"));
+		
+		
 	}
 	
 	@Override
@@ -46,6 +51,7 @@ public class PantallaPlay extends PantallaAbstracta implements InputProcessor {
 		heroe.render(delta);
 		manejoEntrada(delta);
 		camara.update();
+		musica.play();
 	}
 	
 	public void manejoEntrada(float delta){

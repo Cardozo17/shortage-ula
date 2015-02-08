@@ -28,6 +28,7 @@ public class Shortage extends Game {
 	public void dispose() {
 		// TODO Auto-generated method stub
 		Pantallas.PANTALLAJUEGO.dispose();
+		batch.dispose();
 	}
 	
 	
