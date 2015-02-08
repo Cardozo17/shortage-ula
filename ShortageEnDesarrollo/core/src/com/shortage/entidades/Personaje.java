@@ -6,6 +6,13 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
 
 public class Personaje  {
 	
@@ -15,6 +22,12 @@ public class Personaje  {
 	int vidamax;
 	float posX, posY, alto, ancho;
 	Sprite sprite;
+	
+	Body cuerpo;
+	BodyDef bodydef;
+	FixtureDef fixturedef;
+	Fixture fixture;
+	
 	
 	public TextureRegion skinRegion;
 	public Animation skinAnimationDown,skinAnimationRight,skinAnimationUp,skinAnimationLeft; 
@@ -65,6 +78,12 @@ public class Personaje  {
 	skinAnimationRight = new Animation(0.1f, skinFramesRight);
 	skinAnimationUp = new Animation(0.1f, skinFramesUp);
 	skinAnimationLeft = new Animation(0.1f, skinFramesLeft);
+    
+	// Colisiones
+	bodydef = new BodyDef();
+	bodydef.type=BodyType.DynamicBody;
+	bodydef.position.set(posX, posY);
+	
     }
 	
     public float getAlto() {
@@ -90,9 +109,14 @@ public class Personaje  {
 		TextureRegion frameRight = skinAnimationRight.getKeyFrame(duracion, true);
 		TextureRegion frameUp = skinAnimationUp.getKeyFrame(duracion, true);
 		TextureRegion frameLeft = skinAnimationLeft.getKeyFrame(duracion, true);
+		
+		posX=cuerpo.getPosition().x;
+		posY=cuerpo.getPosition().y;
+
 		batch.begin();
 		if(estado==ESTADO_ACTUAL.Moviendose){
 			if( vista == VISTA_ACTUAL.abajo ){
+				
 				batch.draw(frameDown, posX, posY);
 			}
 			else if (vista == VISTA_ACTUAL.derecha)
@@ -117,15 +141,23 @@ public class Personaje  {
 						batch.draw(skinFramesLeft[1], posX, posY);
 		}
 		batch.end();
-    	
+       
+    	//cuerpo.getPosition().set(posX, posY);
     }
 
+	public void quieto(){
+		//cuerpo.setLinearVelocity(0f,0f);
+	}
+	
+	
     public void moverDerecha(float delta, float velocidad){
-      	posX=posX+velocidad*delta;
+    	cuerpo.setLinearVelocity(velocidad*delta,0f);
+    	//	posX=posX+velocidad*delta;
     }
     
     public void moverIzquierda(float delta, float velocidad){
-      	posX=posX-velocidad*delta;
+      	//posX=posX-velocidad*delta;
+    	cuerpo.setLinearVelocity(-velocidad*delta,0f);
     }
     
     public void moverArriba(float delta, float velocidad){
@@ -186,6 +218,25 @@ public class Personaje  {
 		estado=ESTADO_ACTUAL.Atacando;
 	}
 
+	public Body crearCuerpo(World world){
+		cuerpo=world.createBody(bodydef);
+	
+		PolygonShape shape = new PolygonShape();
+
+        shape.setAsBox(124 / 4, 144/5);
+        
+        fixturedef = new FixtureDef();
+        fixturedef.shape = shape;
+        fixturedef.density = 1f;
+        fixturedef.isSensor=false;
+        
+        fixture = cuerpo.createFixture(fixturedef);
+       
+        shape.dispose();
+		
+		return cuerpo;
+	}
+	
 }
 
 
