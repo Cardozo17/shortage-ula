@@ -3,6 +3,7 @@ package com.shortage.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.shortage.pantallas.MenuPrincipal;
+import com.shortage.pantallas.PantallaFindeJuego;
 import com.shortage.pantallas.PantallaPlay;
 import com.shortage.pantallas.Pantallas;
 
@@ -18,6 +19,7 @@ public class Shortage extends Game {
 		Pantallas.juego = this;
 		Pantallas.PANTALLAJUEGO= new PantallaPlay(this);
 		Pantallas.MENUPRINCIPAL= new MenuPrincipal(this); 
+		Pantallas.FINDEJUEGO= new PantallaFindeJuego(this);
 		
 		
 		setScreen(Pantallas.MENUPRINCIPAL);
@@ -28,6 +30,7 @@ public class Shortage extends Game {
 	public void dispose() {
 		// TODO Auto-generated method stub
 		Pantallas.PANTALLAJUEGO.dispose();
+		//Pantallas.FINDEJUEGO.dispose();
 		batch.dispose();
 	}
 	

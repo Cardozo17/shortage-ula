@@ -119,28 +119,28 @@ public class Personaje  {
 		if(estado==ESTADO_ACTUAL.Moviendose){
 			if( vista == VISTA_ACTUAL.abajo ){
 				
-				batch.draw(frameDown,Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+				batch.draw(frameDown,Gdx.graphics.getWidth()/2 - 124 / 6, Gdx.graphics.getHeight()/2 - 144/8);
 			}
 			else if (vista == VISTA_ACTUAL.derecha)
-				batch.draw(frameRight,Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+				batch.draw(frameRight,Gdx.graphics.getWidth()/2 - 124 / 6, Gdx.graphics.getHeight()/2 - 144/8);
 				else if( vista == VISTA_ACTUAL.arriba)
-					batch.draw(frameUp, Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+					batch.draw(frameUp, Gdx.graphics.getWidth()/2 - 124 / 6, Gdx.graphics.getHeight()/2 - 144/8);
 					else if( vista == VISTA_ACTUAL.izquierda)
 		
-						batch.draw(frameLeft,Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+						batch.draw(frameLeft,Gdx.graphics.getWidth()/2 - 124 / 6, Gdx.graphics.getHeight()/2 - 144/8);
 		}
 		else if(estado==ESTADO_ACTUAL.Quieto)
 		{
 			if( vista == VISTA_ACTUAL.abajo ){
-				batch.draw(skinFramesDown[1],Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+				batch.draw(skinFramesDown[1],Gdx.graphics.getWidth()/2 - 124 / 6, Gdx.graphics.getHeight()/2 - 144/8);
 			}
 			else if (vista == VISTA_ACTUAL.derecha)
-				batch.draw(skinFramesRight[1],Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+				batch.draw(skinFramesRight[1],Gdx.graphics.getWidth()/2 - 124 / 6, Gdx.graphics.getHeight()/2 - 144/8);
 				else if( vista == VISTA_ACTUAL.arriba)
-					batch.draw(skinFramesUp[1], Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+					batch.draw(skinFramesUp[1], Gdx.graphics.getWidth()/2 - 124 / 6, Gdx.graphics.getHeight()/2 - 144/8);
 					else if( vista == VISTA_ACTUAL.izquierda)
 		
-						batch.draw(skinFramesLeft[1], Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+						batch.draw(skinFramesLeft[1], Gdx.graphics.getWidth()/2 - 124 / 6, Gdx.graphics.getHeight()/2 - 144/8);
 		}
 		batch.end();
        
@@ -152,24 +152,24 @@ public class Personaje  {
 	}
 	
 	
-    public void moverDerecha(float delta, float velocidad){
-    	cuerpo.setLinearVelocity(velocidad*delta,0f);
+    public void moverDerecha(float delta, double velocidad){
+    	cuerpo.setLinearVelocity((float) (velocidad*delta),0f);
     	//	posX=posX+velocidad*delta;
     }
     
-    public void moverIzquierda(float delta, float velocidad){
+    public void moverIzquierda(float delta, double velocidad){
       	//posX=posX-velocidad*delta;
-    	cuerpo.setLinearVelocity(-velocidad*delta,0f);
+    	cuerpo.setLinearVelocity((float) (-velocidad*delta),0f);
     }
     
-    public void moverArriba(float delta, float velocidad){
+    public void moverArriba(float delta, double velocidad){
       	//posY=posY+velocidad*delta;
-    	cuerpo.setLinearVelocity(0f,velocidad*delta);
+    	cuerpo.setLinearVelocity(0f,(float) (velocidad*delta));
     }
     
-    public void moverAbajo(float delta, float velocidad){
+    public void moverAbajo(float delta, double velocidad){
       	//posY=posY-velocidad*delta;
-    	cuerpo.setLinearVelocity(0f,-velocidad*delta);
+    	cuerpo.setLinearVelocity(0f,(float) (-velocidad*delta));
     }
     
     public void actualizarPosicion(float x, float y){
@@ -234,7 +234,7 @@ public class Personaje  {
 	
 		PolygonShape shape = new PolygonShape();
 
-        shape.setAsBox(124 / 4/PPM, 144/5/PPM);
+        shape.setAsBox(124 / 8/PPM, 144/9/PPM);// Gdx.graphics.getWidth()/2 - 124 / 6, Gdx.graphics.getHeight()/2 - 144/8
         
         fixturedef = new FixtureDef();
         fixturedef.shape = shape;
@@ -243,10 +243,9 @@ public class Personaje  {
         fixturedef.isSensor=false;
         
         fixture = cuerpo.createFixture(fixturedef);
-       
+        fixture.setUserData("Jugador");
         shape.dispose();
-		
-		return cuerpo;
+				return cuerpo;
 	}
 	
 }

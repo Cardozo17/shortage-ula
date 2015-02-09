@@ -37,10 +37,7 @@ import com.shortage.game.Shortage;
 			batch.draw(fondo, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			salir.draw(batch);
 			jugar.draw(batch);
-			
 			batch.end();
-			
-			
 			
 		}
 

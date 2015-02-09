@@ -10,7 +10,9 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -26,88 +28,160 @@ import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
+import com.shortage.entidades.Coleccionable;
 import com.shortage.entidades.Personaje;
 import com.shortage.game.Shortage;
+import com.shortage.hud.Hud;
+import com.shortage.manejadores.ContactBodies;
 
 public class PantallaPlay extends PantallaAbstracta implements InputProcessor {
 	
-	static final float velocidad=1000000000;
+	static final double velocidad=2000000000;
 	private TiledMap mapa;
-	OrthographicCamera camara;
-	TiledMapRenderer renderizarMapa;
+	OrthographicCamera camara, camaraHud;
+	OrthogonalTiledMapRenderer renderizarMapa;
 	Personaje heroe;
 	SpriteBatch batch;
 	World mundo;
 	Body obstaculo;
 	BodyDef bodydefObstaculo;
 	final float PPM=1;
-	int altomapa;
-	int anchomapa;
-	int tileSize;
 	Music musica;
-	
-	
+	Coleccionable harina,leche,papel;
+
+	ContactBodies gestorColiciones;
 	private Box2DDebugRenderer b2dr;
+	Array<Body> cuerposABorrar=new Array<Body>();
+	boolean harinaViva=true,lecheViva=true,papelVivo=true;
 	
-	
+	Hud hud;
 	
 	public PantallaPlay(Shortage game) {
 		super(game);
+		batch= new SpriteBatch();
 		mapa= new TmxMapLoader().load("mapa1.3.tmx");
 		camara = new OrthographicCamera();
 		camara.setToOrtho(false, Gdx.graphics.getWidth()/PPM, Gdx.graphics.getHeight()/PPM);
 		camara.update();
 		renderizarMapa= new OrthogonalTiledMapRenderer(mapa);
 		heroe= new Personaje(camara);
-		//Gdx.input.setInputProcessor(this);
+		harina=new Coleccionable(50*32,(149-94)*32,"harinaTextura.png");
+		papel=new Coleccionable(2941,859,"papelTextura.png");
+		leche=new Coleccionable(2876,2202,"lecheTextura.png");
+		
+		Gdx.input.setInputProcessor(this);
 		mundo=new World(new Vector2(0, 0), true);
+		
+		//creando los cuerpos de las entidades
 		heroe.crearCuerpo(mundo);
-        
-        createWalls();
+		harina.crearCuerpo(mundo);
+		papel.crearCuerpo(mundo);
+		leche.crearCuerpo(mundo);
+		
+        //paredes de la capa
+		createWalls();
+        //dibuja los cuadros
 		b2dr = new Box2DDebugRenderer();
-		
-		BodyDef bdef = new BodyDef();
-		bdef.position.set(160/PPM , 120/PPM );
-		bdef.type = BodyType.StaticBody;
-		Body body = mundo.createBody(bdef);
-		
-		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(50 /PPM, 5/PPM );
-		FixtureDef fdef = new FixtureDef();
-		fdef.shape = shape;
-		body.createFixture(fdef);
-		
-		// create falling box
-		bdef.position.set(160/PPM , 200/PPM );
-		bdef.type = BodyType.DynamicBody;
-		body = mundo.createBody(bdef);
-		
-		shape.setAsBox(5/PPM , 5 /PPM);
-		fdef.shape = shape;
-		body.createFixture(fdef);
+		//Musica de pantalla play
 		musica= Gdx.audio.newMusic(Gdx.files.internal("Britney Spears - 3 (Doctor P Dubstep Remix) .mp3"));
-
-	}
+		// Gestor de coliciones 
+		gestorColiciones= new ContactBodies();
+		mundo.setContactListener(gestorColiciones);
+		gestorColiciones.setbody(heroe.getCuerpo(), harina.getCuerpo());
+		
+		hud= new Hud();
+		camaraHud= new OrthographicCamera();
+		}
 	
 	@Override
 	public void render(float delta){
-        Gdx.gl.glClearColor(0,128,0, 8);
+        Gdx.gl.glClearColor(0,0,0, 8);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+    
         mundo.step(delta, 6, 2);
-		//batch.begin();
-		//heroe.draw(batch, delta);
-		//batch.end();
-		renderizarMapa.setView(camara);
+        batch.setProjectionMatrix(camara.combined);
+        camara.update();
+                
 		renderizarMapa.render();
+		//render de entidades
+		
 		heroe.render(delta);
+		//harina.render(delta);
 		manejoEntrada(delta);
-		camara.update();
+		
 		// draw box2d world
 		b2dr.render(mundo, camara.combined);
+		//seguir con la camara
 		camara.position.set(heroe.getCuerpo().getPosition().x,heroe.getCuerpo().getPosition().y,camara.position.z);
+		
+	  
+        batch.begin();
+        if (harinaViva){
+        	harina.draw(batch);
+        }
+        if(papelVivo){
+        	papel.draw(batch);
+        }
+        if(lecheViva){
+        	leche.draw(batch);
+        }
+		batch.end();
+		
+		renderizarMapa.setView(camara);
+		//batch.setProjectionMatrix(camaraHud.combined);
+	//	batch.begin();
+		hud.render(delta);
+		//batch.end();
+		
+		borrarCuerpos();
+		
 		musica.play();
 		saliralMenu();
+		findejuego();
+		
+		
+		//System.out.println("x"+heroe.getCuerpo().getPosition().x+"  y"+heroe.getCuerpo().getPosition().y);
+		
+	}
+	
+	public void findejuego(){
+		if(!lecheViva && !papelVivo && !harinaViva){
+			Pantallas.juego.setScreen(Pantallas.FINDEJUEGO);
+			musica.pause();
+		}
+	}
+	
+	
+	public void borrarCuerpos(){
+       Array<Body> cuerposABorrar = gestorColiciones.getBodiesDelete();
+        for(int i=0;i<cuerposABorrar.size;i++){
+        	
+        	Body b=cuerposABorrar.get(i);
+        	if(harina.getCuerpo() == b){
+        		harinaViva=false;
+        		mundo.destroyBody(b);
+        		harina.dispose();
+        		hud.setObjetosRestantes(hud.getObjetosRestantes()-1);
+        	}
+        		if(papel.getCuerpo() == b){
+            		papelVivo=false;
+            		mundo.destroyBody(b);
+            		papel.dispose();
+            		hud.setObjetosRestantes(hud.getObjetosRestantes()-1);
+        		}
+            		if(leche.getCuerpo() == b){
+                		lecheViva=false;
+                		mundo.destroyBody(b);
+                		leche.dispose();
+                		hud.setObjetosRestantes(hud.getObjetosRestantes()-1);
+            		}
+        	
+        	
+        }
+        
+        cuerposABorrar.clear();
 		
 	}
 	
