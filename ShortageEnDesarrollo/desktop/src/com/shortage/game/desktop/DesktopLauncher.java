@@ -10,6 +10,7 @@ public class DesktopLauncher {
 		config.title = "ShortAge";
 		config.width=800;
 		config.height=600;
+		config.resizable=false;
 		new LwjglApplication(new Shortage(), config);
 		
 	}

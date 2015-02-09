@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.shortage.entidades.Boton;
 import com.shortage.entidades.BotonJugar;
 import com.shortage.entidades.BotonSalir;
@@ -12,14 +13,16 @@ import com.shortage.game.Shortage;
 	public class MenuPrincipal  extends PantallaAbstracta {
 		
 		private static SpriteBatch batch;
-		//private Texture fondo;
+		private Texture fondo;
+		private TextureRegion regionfondo;
 		private Boton jugar, salir;
 
 		public MenuPrincipal(Shortage shortage) {
 			// TODO Auto-generated constructor stub
 			super(shortage);
 			
-		//	fondo = new Texture(Gdx.files.internal(""));
+			fondo = new Texture(Gdx.files.internal("escasez.jpg"));
+			regionfondo= new TextureRegion(fondo);
 		}
 
 		@Override
@@ -31,6 +34,7 @@ import com.shortage.game.Shortage;
 			jugar.update();
 			
 			batch.begin();
+			batch.draw(fondo, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			salir.draw(batch);
 			jugar.draw(batch);
 			

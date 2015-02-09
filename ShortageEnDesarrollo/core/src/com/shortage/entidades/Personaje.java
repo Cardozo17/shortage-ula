@@ -1,6 +1,7 @@
 package com.shortage.entidades;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -22,12 +23,13 @@ public class Personaje  {
 	int vidamax;
 	float posX, posY, alto, ancho;
 	Sprite sprite;
+	OrthographicCamera camara;
 	
 	Body cuerpo;
 	BodyDef bodydef;
 	FixtureDef fixturedef;
 	Fixture fixture;
-	
+	final float PPM=1;
 	
 	public TextureRegion skinRegion;
 	public Animation skinAnimationDown,skinAnimationRight,skinAnimationUp,skinAnimationLeft; 
@@ -40,14 +42,15 @@ public class Personaje  {
 	public enum VISTA_ACTUAL{arriba, abajo, izquierda, derecha}
 	public VISTA_ACTUAL vista;
 	
-    public Personaje(){
+    public Personaje(OrthographicCamera x){
     skin = new Texture(Gdx.files.internal("personajee.png"));
     batch = new SpriteBatch();
     sprite = new Sprite(skin);
     alto=skin.getHeight();
     ancho=skin.getWidth();
-    posX=(Gdx.graphics.getWidth()/2)-ancho/2;
-    posY=(Gdx.graphics.getHeight()/2)-alto/2;
+    posX=Gdx.graphics.getWidth()/2;
+    posY=Gdx.graphics.getHeight()/2;
+    camara=x;
     
     //Estado inicial
     estado=ESTADO_ACTUAL.Quieto; 
@@ -110,35 +113,34 @@ public class Personaje  {
 		TextureRegion frameUp = skinAnimationUp.getKeyFrame(duracion, true);
 		TextureRegion frameLeft = skinAnimationLeft.getKeyFrame(duracion, true);
 		
-		posX=cuerpo.getPosition().x;
-		posY=cuerpo.getPosition().y;
+
 
 		batch.begin();
 		if(estado==ESTADO_ACTUAL.Moviendose){
 			if( vista == VISTA_ACTUAL.abajo ){
 				
-				batch.draw(frameDown, posX, posY);
+				batch.draw(frameDown,Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
 			}
 			else if (vista == VISTA_ACTUAL.derecha)
-				batch.draw(frameRight, posX, posY);
+				batch.draw(frameRight,Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
 				else if( vista == VISTA_ACTUAL.arriba)
-					batch.draw(frameUp, posX, posY);
+					batch.draw(frameUp, Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
 					else if( vista == VISTA_ACTUAL.izquierda)
 		
-						batch.draw(frameLeft, posX, posY);
+						batch.draw(frameLeft,Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
 		}
 		else if(estado==ESTADO_ACTUAL.Quieto)
 		{
 			if( vista == VISTA_ACTUAL.abajo ){
-				batch.draw(skinFramesDown[1], posX, posY);
+				batch.draw(skinFramesDown[1],Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
 			}
 			else if (vista == VISTA_ACTUAL.derecha)
-				batch.draw(skinFramesRight[1], posX, posY);
+				batch.draw(skinFramesRight[1],Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
 				else if( vista == VISTA_ACTUAL.arriba)
-					batch.draw(skinFramesUp[1], posX, posY);
+					batch.draw(skinFramesUp[1], Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
 					else if( vista == VISTA_ACTUAL.izquierda)
 		
-						batch.draw(skinFramesLeft[1], posX, posY);
+						batch.draw(skinFramesLeft[1], Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
 		}
 		batch.end();
        
@@ -146,7 +148,7 @@ public class Personaje  {
     }
 
 	public void quieto(){
-		//cuerpo.setLinearVelocity(0f,0f);
+		cuerpo.setLinearVelocity(0f,0f);
 	}
 	
 	
@@ -161,11 +163,13 @@ public class Personaje  {
     }
     
     public void moverArriba(float delta, float velocidad){
-      	posY=posY+velocidad*delta;
+      	//posY=posY+velocidad*delta;
+    	cuerpo.setLinearVelocity(0f,velocidad*delta);
     }
     
     public void moverAbajo(float delta, float velocidad){
-      	posY=posY-velocidad*delta;
+      	//posY=posY-velocidad*delta;
+    	cuerpo.setLinearVelocity(0f,-velocidad*delta);
     }
     
     public void actualizarPosicion(float x, float y){
@@ -188,7 +192,14 @@ public class Personaje  {
 	public void setPosY(float posY) {
 		this.posY = posY;
 	}
-	
+	public Body getCuerpo() {
+		return cuerpo;
+	}
+
+	public void setCuerpo(Body cuerpo) {
+		this.cuerpo = cuerpo;
+	}
+
 	//Modificando Vistas
 	public void mirarDerecha(){
 		vista = VISTA_ACTUAL.derecha;
@@ -223,11 +234,12 @@ public class Personaje  {
 	
 		PolygonShape shape = new PolygonShape();
 
-        shape.setAsBox(124 / 4, 144/5);
+        shape.setAsBox(124 / 4/PPM, 144/5/PPM);
         
         fixturedef = new FixtureDef();
         fixturedef.shape = shape;
         fixturedef.density = 1f;
+        fixturedef.friction=1f;
         fixturedef.isSensor=false;
         
         fixture = cuerpo.createFixture(fixturedef);

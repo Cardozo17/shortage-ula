@@ -1,11 +1,13 @@
 package com.shortage.pantallas;
 
 
-import Manejadores.ContactBodies;
+
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -21,7 +23,6 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.ChainShape;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
@@ -30,7 +31,7 @@ import com.shortage.game.Shortage;
 
 public class PantallaPlay extends PantallaAbstracta implements InputProcessor {
 	
-	static final float velocidad=300;
+	static final float velocidad=1000000000;
 	private TiledMap mapa;
 	OrthographicCamera camara;
 	TiledMapRenderer renderizarMapa;
@@ -39,11 +40,12 @@ public class PantallaPlay extends PantallaAbstracta implements InputProcessor {
 	World mundo;
 	Body obstaculo;
 	BodyDef bodydefObstaculo;
-	final float PPM=100;
-	float altomapa;
-	float anchomapa;
-	float tileSize;
-	private ContactBodies cb;
+	final float PPM=1;
+	int altomapa;
+	int anchomapa;
+	int tileSize;
+	Music musica;
+	
 	
 	private Box2DDebugRenderer b2dr;
 	
@@ -53,36 +55,37 @@ public class PantallaPlay extends PantallaAbstracta implements InputProcessor {
 		super(game);
 		mapa= new TmxMapLoader().load("mapa1.3.tmx");
 		camara = new OrthographicCamera();
-		camara.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		camara.setToOrtho(false, Gdx.graphics.getWidth()/PPM, Gdx.graphics.getHeight()/PPM);
 		camara.update();
 		renderizarMapa= new OrthogonalTiledMapRenderer(mapa);
-		heroe= new Personaje();
+		heroe= new Personaje(camara);
 		//Gdx.input.setInputProcessor(this);
 		mundo=new World(new Vector2(0, 0), true);
 		heroe.crearCuerpo(mundo);
         
-       // createWalls();
+        createWalls();
 		b2dr = new Box2DDebugRenderer();
 		
 		BodyDef bdef = new BodyDef();
-		bdef.position.set(160 , 120 );
+		bdef.position.set(160/PPM , 120/PPM );
 		bdef.type = BodyType.StaticBody;
 		Body body = mundo.createBody(bdef);
 		
 		PolygonShape shape = new PolygonShape();
-		shape.setAsBox(50 , 5 );
+		shape.setAsBox(50 /PPM, 5/PPM );
 		FixtureDef fdef = new FixtureDef();
 		fdef.shape = shape;
 		body.createFixture(fdef);
 		
 		// create falling box
-		bdef.position.set(160 , 200 );
+		bdef.position.set(160/PPM , 200/PPM );
 		bdef.type = BodyType.DynamicBody;
 		body = mundo.createBody(bdef);
 		
-		shape.setAsBox(5 , 5 );
+		shape.setAsBox(5/PPM , 5 /PPM);
 		fdef.shape = shape;
 		body.createFixture(fdef);
+		musica= Gdx.audio.newMusic(Gdx.files.internal("Britney Spears - 3 (Doctor P Dubstep Remix) .mp3"));
 
 	}
 	
@@ -102,7 +105,18 @@ public class PantallaPlay extends PantallaAbstracta implements InputProcessor {
 		camara.update();
 		// draw box2d world
 		b2dr.render(mundo, camara.combined);
+		camara.position.set(heroe.getCuerpo().getPosition().x,heroe.getCuerpo().getPosition().y,camara.position.z);
+		musica.play();
+		saliralMenu();
 		
+	}
+	
+	public void saliralMenu(){
+		
+		if(Gdx.input.isKeyPressed(Keys.ESCAPE)||Gdx.input.isKeyPressed(Keys.BACK)){
+			Pantallas.juego.setScreen(Pantallas.MENUPRINCIPAL);
+			musica.pause();
+		}
 	}
 	
 	public void manejoEntrada(float delta){
@@ -111,12 +125,14 @@ public class PantallaPlay extends PantallaAbstracta implements InputProcessor {
 			heroe.mirarDerecha();
 			heroe.estadoMoviendose();
 			heroe.moverDerecha(delta, velocidad);
+			//camara.translate(10f, 0);
 			//camara.position.set(camara.position.x+velocidad*delta, camara.position.y, camara.position.z);
 		}else
 			if (Gdx.input.isKeyPressed(Input.Keys.A)) {
 			heroe.mirarIzquierda();
 			heroe.estadoMoviendose();
 			heroe.moverIzquierda(delta, velocidad);
+			//camara.translate(-10f, 0);
 			//camara.position.set(camara.position.x-velocidad*delta, camara.position.y, camara.position.z);
 			}
 		
@@ -125,12 +141,14 @@ public class PantallaPlay extends PantallaAbstracta implements InputProcessor {
 			heroe.mirarArriba();
 			heroe.estadoMoviendose();
 			heroe.moverArriba(delta, velocidad);
+			//camara.translate(0, 10f);
 			//camara.position.set(camara.position.x, camara.position.y+velocidad*delta, camara.position.z);
 		}else
 			if (Gdx.input.isKeyPressed(Input.Keys.S)) {
 			heroe.mirarAbajo();
 			heroe.estadoMoviendose();
 			heroe.moverAbajo(delta, velocidad);
+			//camara.translate(0, -10f);
 			//camara.position.set(camara.position.x, camara.position.y-velocidad*delta, camara.position.z);
 			
 			}
@@ -138,7 +156,7 @@ public class PantallaPlay extends PantallaAbstracta implements InputProcessor {
 		if(!Gdx.input.isKeyPressed(Input.Keys.S) && !Gdx.input.isKeyPressed(Input.Keys.A) && !Gdx.input.isKeyPressed(Input.Keys.D) && !Gdx.input.isKeyPressed(Input.Keys.W) )
 		{
 		heroe.estadoQuieto();
-		//heroe.quieto();
+		heroe.quieto();
 		}
 		
 	}
@@ -227,23 +245,23 @@ public class PantallaPlay extends PantallaAbstracta implements InputProcessor {
 	}
 
 	//creando las paredes
-	/*private void createWalls() {
+	private void createWalls() {
 		
-		anchomapa =  (Float) mapa.getProperties().get("width");
-		altomapa =  (Float) mapa.getProperties().get("height");
-		tileSize =  (Float) mapa.getProperties().get("tilewidth");
+		/*anchomapa =  (int) mapa.getProperties().get("width");
+		altomapa =  (int) mapa.getProperties().get("height");
+		tileSize =  (int) mapa.getProperties().get("tilewidth");*/
 		
 		// read each of the "red" "green" and "blue" layers
 		TiledMapTileLayer layer;
-		layer = (TiledMapTileLayer) mapa.getLayers().get("colisiones");
+		layer = (TiledMapTileLayer)mapa.getLayers().get(15);
 		createBlocks(layer);
 
 		
-	}*/
+	}
 	
 	/// creando bloques de colisiones desde el mapa
 	
-		/*private void createBlocks(TiledMapTileLayer layer) {
+		private void createBlocks(TiledMapTileLayer layer) {
 		
 		// tile size
 		float ts = layer.getTileWidth();
@@ -281,5 +299,5 @@ public class PantallaPlay extends PantallaAbstracta implements InputProcessor {
 		
 	
 	
-		}*/
+		}
 }
