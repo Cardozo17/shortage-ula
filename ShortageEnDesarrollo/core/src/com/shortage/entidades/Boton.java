@@ -41,7 +41,7 @@ public abstract class Boton {
 	
 	private boolean sepulsaboton()
 	{
-		return Gdx.input.isTouched() && Gdx.input.getX()>= Xmin && Gdx.input.getY()<=Xmax
+		return Gdx.input.isTouched() && Gdx.input.getX()>= Xmin && Gdx.input.getX()<=Xmax
 				&& Gdx.input.getY()>=Ymin && Gdx.input.getY()<=Ymax;
 		
 	}

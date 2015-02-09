@@ -260,8 +260,9 @@ public class PantallaPlay extends PantallaAbstracta implements InputProcessor {
 
 	@Override
 	public void dispose() {
+		batch.dispose();
 		// TODO Auto-generated method stub
-		
+	
 		
 	}
 	
