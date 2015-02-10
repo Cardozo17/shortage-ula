@@ -8,6 +8,9 @@ public final class Pantallas {
 	public static PantallaPlay PANTALLAJUEGO;
 	public static MenuPrincipal MENUPRINCIPAL;
 	public static PantallaFindeJuego FINDEJUEGO;
-	public static PantallaLogin PANTALLALOGIN;
+	//public static PantallaFormulario PANTALLAFORMULARIO;
+	public static PantallaIniciodeSesion PANTALLAINICIODESESION;
+	public static PantallaRegistrodeUsuario PANTALLAREGISTRODEUSUARIO;
+	}
 
-}
+
