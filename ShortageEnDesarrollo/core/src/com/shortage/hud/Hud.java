@@ -1,52 +1,56 @@
 package com.shortage.hud;
 
-import java.util.Date;
-
-import sun.rmi.runtime.NewThreadAction;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-
-
 public class Hud {
 
-private Date tiempo;
-private int objetosRestantes;
-private BitmapFont objetosRestantesText;
-private SpriteBatch batch;
-private int time=0;
+	//Para el Cronometro
+	float counter, timeCounter;
+	int min, sec;
 
-	public Hud(){
-	tiempo=new Date();
-	objetosRestantes=3;
-	objetosRestantesText= new BitmapFont();
-	objetosRestantesText.setColor(Color.BLUE);
-	batch= new SpriteBatch();
+	private int objetosRestantes;
+	private BitmapFont objetosRestantesText;
+	private SpriteBatch batch;
+	
+
+	public Hud() {
+		
+		objetosRestantes = 3;
+		objetosRestantesText = new BitmapFont();
+		objetosRestantesText.setScale(1.5f);
+		objetosRestantesText.setColor(Color.BLUE);
+		batch = new SpriteBatch();
 	}
-	
-	
-	 
-	
-	
-	public void render(float delta){
-		time+=1;
+
+	public void render(float delta) {
+		
+		//Cronometro
+		timeCounter += Gdx.graphics.getDeltaTime();
+		if(timeCounter >= 1.0f){
+		timeCounter = 0;
+		counter++;
+		}
+		min= (int) (counter/60);
+		sec= (int)(counter%60);	
+		
+		//Si quisieramos que se descontara el tiempo int totaltime= 6 *60 ej 6 min
+		// totaltime -= timecounter;
+		
+		
 		batch.begin();
-		objetosRestantesText.draw(batch, "Productos por recoger:   "+Integer.toString(objetosRestantes), 50,50);
-		objetosRestantesText.draw(batch, "Tiempo :   "+tiempo.toLocaleString(), 250,50);
+		objetosRestantesText.draw(
+				batch,
+				"Productos por Recoger:   "
+						+ Integer.toString(objetosRestantes), 50, 50);
+		objetosRestantesText.draw(batch,
+				"Tiempo :   " +min +":"+ sec, 350, 50);
 		batch.end();
 	}
-	
-	 public Date getTiempo() {
-		return tiempo;
-	}
 
-	public void setTiempo(Date tiempo) {
-		this.tiempo = tiempo;
-	}
+
 
 	public int getObjetosRestantes() {
 		return objetosRestantes;
@@ -65,13 +69,8 @@ private int time=0;
 	}
 
 	public void dispose() {
-	       
-	        objetosRestantesText.dispose();
-	    }
-	
-	
 
-	
-	
-	
+		objetosRestantesText.dispose();
+	}
+
 }

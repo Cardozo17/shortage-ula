@@ -5,10 +5,6 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.shortage.entidades.Boton;
-import com.shortage.entidades.BotonJugar;
-import com.shortage.entidades.BotonSalir;
 import com.shortage.game.Shortage;
 
 public class PantallaFindeJuego extends PantallaAbstracta  {
@@ -69,6 +65,7 @@ public class PantallaFindeJuego extends PantallaAbstracta  {
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
+		batch.dispose();
 		
 	}
 	
