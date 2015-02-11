@@ -1,8 +1,11 @@
 package com.shortage.pantallas;
 
+import javax.swing.JOptionPane;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -11,6 +14,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.shortage.basededatos.UsuarioDAO;
+import com.shortage.basededatos.UsuarioVO;
+import com.shortage.entidades.Etiqueta;
+import com.shortage.entidades.EtiquetaTitulo;
 import com.shortage.game.Shortage;
 
 public class PantallaRegistrodeUsuario extends PantallaAbstracta {
@@ -20,6 +27,8 @@ public class PantallaRegistrodeUsuario extends PantallaAbstracta {
 	private TextField nombre, clave;
 	private BitmapFont texto;
 	private SpriteBatch batch;
+	private Texture fondo;
+	private Etiqueta Titulo;
 	
 	
 	public PantallaRegistrodeUsuario(Shortage game) {
@@ -28,6 +37,8 @@ public class PantallaRegistrodeUsuario extends PantallaAbstracta {
 		
 		stage = new Stage();
 		skin=new Skin(Gdx.files.internal("uiskin.json"));
+		
+		fondo = new Texture(Gdx.files.internal("registroTexture.png"));
 		
 		crearCuenta=new TextButton("Crear Cuenta", skin);
 		crearCuenta.setPosition(220, 125);
@@ -65,7 +76,7 @@ public class PantallaRegistrodeUsuario extends PantallaAbstracta {
 		batch= new SpriteBatch();
 		texto=new BitmapFont();
 		texto.setScale(1.5f);
-		texto.setColor(Color.WHITE);
+		texto.setColor(Color.BLACK);
 	}
 
 
@@ -77,13 +88,17 @@ public class PantallaRegistrodeUsuario extends PantallaAbstracta {
         
         Gdx.input.setInputProcessor(stage);
         
-		stage.act(delta);
-		stage.draw();
+		
 		batch.begin();
+		batch.draw(fondo, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		Titulo.draw(batch);
 		texto.draw(batch, "Registro de Jugadores",275, 425);
 		texto.draw(batch, "Usuario:",150, 325);
 		texto.draw(batch, "Contraseña:", 150, 275);
 		batch.end();
+		
+		stage.act(delta);
+		stage.draw();
 	}
 
 
@@ -97,6 +112,7 @@ public class PantallaRegistrodeUsuario extends PantallaAbstracta {
 	@Override
 	public void show() {
 		// TODO Auto-generated method stub
+		Titulo = new EtiquetaTitulo(Gdx.graphics.getWidth()/2-250, Gdx.graphics.getHeight()-150);
 		
 	}
 
@@ -129,13 +145,44 @@ public class PantallaRegistrodeUsuario extends PantallaAbstracta {
 	}
 	
 	public void botonCrearCuentaclicked(){
-		Pantallas.juego.setScreen(Pantallas.PANTALLAINICIODESESION);
-	}
+		
+		UsuarioVO usuario = new UsuarioVO();
+		usuario.setNombre(nombre.getText());
+		usuario.setClave(clave.getText());
+		
+		//String nombreaux= nombre.getText();
+		
+		UsuarioDAO usuariobd = new UsuarioDAO();
+		
+		if(!usuariobd.registrarUsuario(usuario))
+		{	
+			JOptionPane.showMessageDialog(null,
+					"El Nombre de Usuario No Esta Disponible", "Información",JOptionPane.INFORMATION_MESSAGE);
+			
+			crearCuenta.addListener(new ClickListener(){
+				public void touchUp(InputEvent e, float x, float y, int point, int button){
+				botonCrearCuentaclicked();
+			}	
+			});
+				
+		}else{
+			
+			Pantallas.juego.setScreen(Pantallas.PANTALLAINICIODESESION);
+		}						
+			
+		
+		}
 	
 	public void botonVolverclicked(){
 		Pantallas.juego.setScreen(Pantallas.PANTALLAINICIODESESION);
 		
+		volver.addListener(new ClickListener(){
+			public void touchUp(InputEvent e, float x, float y, int point, int button){
+			botonVolverclicked();
+			}
+		});
+		
 	}
 	
-	
-}
+	}	
+

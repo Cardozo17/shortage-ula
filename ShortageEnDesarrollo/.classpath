@@ -2,5 +2,7 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="con" path="org.springsource.ide.eclipse.gradle.classpathcontainer"/>
+	<classpathentry kind="lib" path="C:/Users/José Antonio/Documents/Java/mysql-connector-java-5.1.21/mysql-connector-java-5.1.21-bin.jar"/>
+	<classpathentry kind="lib" path="C:/Users/José Antonio/Downloads/common-lang3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

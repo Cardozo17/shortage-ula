@@ -26,7 +26,9 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.shortage.entidades.Coleccionable;
+import com.shortage.entidades.Enemigo;
 import com.shortage.entidades.Personaje;
+import com.shortage.entidades.Personaje.ESTADO_ACTUAL;
 import com.shortage.game.Shortage;
 import com.shortage.hud.Hud;
 import com.shortage.manejadores.ContactBodies;
@@ -51,7 +53,12 @@ public class PantallaPlay extends PantallaAbstracta implements InputProcessor {
 	Array<Body> cuerposABorrar=new Array<Body>();
 	boolean harinaViva=true,lecheViva=true,papelVivo=true;
 	
+	
 	Hud hud;
+	
+	Enemigo enemigo, enemigo1, enemigoA, enemigoB, enemigoC, enemigoD, enemigoE, 
+	enemigoF, enemigoG, enemigoH, enemigoI, enemigoJ, enemigoK, 
+	enemigoL, enemigoM, enemigoN, enemigoO, enemigoP, enemigoQ;
 	
 	public PantallaPlay(Shortage game) {
 		super(game);
@@ -65,6 +72,26 @@ public class PantallaPlay extends PantallaAbstracta implements InputProcessor {
 		harina=new Coleccionable(50*32,(149-94)*32,"harinaTextura.png");
 		papel=new Coleccionable(2941,859,"papelTextura.png");
 		leche=new Coleccionable(2876,2202,"lecheTextura.png");
+		//creacion de enemigos
+		enemigo= new Enemigo(1942, 1810);
+		enemigo1= new Enemigo(1998, 1043);
+		enemigoA= new Enemigo(1364, 996);
+		enemigoB= new Enemigo(1838, 996);
+		enemigoC= new Enemigo(1166, 957);
+		enemigoD= new Enemigo(1364, 2080);
+		enemigoE= new Enemigo(1838, 2123);
+		enemigoF= new Enemigo(1868, 568);
+		enemigoG= new Enemigo(1902, 2463);
+		enemigoH= new Enemigo(2250, 384);
+		enemigoI= new Enemigo(2904, 792);
+		enemigoJ= new Enemigo(1823, 1183);
+		enemigoK= new Enemigo(875, 1663);
+		enemigoL= new Enemigo(770, 274);
+		enemigoM= new Enemigo(770, 1136);
+		enemigoN= new Enemigo(780, 2192);
+		enemigoO= new Enemigo(1543, 2344);
+		enemigoP= new Enemigo(2486, 2418);
+		enemigoQ= new Enemigo(2654, 2524);
 		
 		Gdx.input.setInputProcessor(this);
 		mundo=new World(new Vector2(0, 0), true);
@@ -74,6 +101,45 @@ public class PantallaPlay extends PantallaAbstracta implements InputProcessor {
 		harina.crearCuerpo(mundo);
 		papel.crearCuerpo(mundo);
 		leche.crearCuerpo(mundo);
+		enemigo.crearCuerpo(mundo);
+		enemigo.setRuta(1942, 1810, 1942, 1045);
+		enemigo1.crearCuerpo(mundo);
+		enemigo1.setRuta(1998, 1043, 1998, 1793);
+		enemigoA.crearCuerpo(mundo);
+		enemigoA.setRuta(1364, 996, 898, 996);
+		enemigoB.crearCuerpo(mundo);
+		enemigoB.setRuta(1838, 996, 1430, 996);
+		enemigoC.crearCuerpo(mundo);
+		enemigoC.setRuta(1166, 957, 1626, 957);
+		enemigoD.crearCuerpo(mundo);
+		enemigoD.setRuta(1364, 2076, 898, 2076);
+		enemigoE.crearCuerpo(mundo);
+		enemigoE.setRuta(1838, 2123, 1430, 2123);
+		enemigoF.crearCuerpo(mundo);
+		enemigoF.setRuta(1868, 568, 2132, 568);
+		enemigoG.crearCuerpo(mundo);
+		enemigoG.setRuta(2063, 2463, 1915, 2463);
+		enemigoH.crearCuerpo(mundo);
+		enemigoH.setRuta(2250, 384, 2934, 384);
+		enemigoI.crearCuerpo(mundo);
+		enemigoI.setRuta(2904, 792, 2904, 514);
+		enemigoJ.crearCuerpo(mundo);
+		enemigoJ.setRuta(1823, 1183, 1823, 1727);
+		enemigoK.crearCuerpo(mundo);
+		enemigoK.setRuta(875, 1663, 1013, 1663);
+		enemigoL.crearCuerpo(mundo);
+		enemigoL.setRuta(770, 274, 770, 998);
+		enemigoM.crearCuerpo(mundo);
+		enemigoM.setRuta(770, 1136, 770, 1734);
+		enemigoN.crearCuerpo(mundo);
+		enemigoN.setRuta(780, 2192, 780, 2796);
+		enemigoO.crearCuerpo(mundo);
+		enemigoO.setRuta(1543, 2344, 1543, 2600);
+		enemigoP.crearCuerpo(mundo);
+		enemigoP.setRuta(2486, 2418, 2486, 2254);
+		enemigoQ.crearCuerpo(mundo);
+		enemigoQ.setRuta(2654, 2524, 2908, 2524);
+		
 		
         //paredes de la capa
 		createWalls();
@@ -81,6 +147,7 @@ public class PantallaPlay extends PantallaAbstracta implements InputProcessor {
 		b2dr = new Box2DDebugRenderer();
 		//Musica de pantalla play
 		musica= Gdx.audio.newMusic(Gdx.files.internal("Britney Spears - 3 (Doctor P Dubstep Remix) .mp3"));
+		
 		// Gestor de coliciones 
 		gestorColiciones= new ContactBodies();
 		mundo.setContactListener(gestorColiciones);
@@ -104,11 +171,30 @@ public class PantallaPlay extends PantallaAbstracta implements InputProcessor {
 		//render de entidades
 		
 		heroe.render(delta);
-		//harina.render(delta);
+		enemigo.render(delta, batch);
+		enemigo1.render(delta, batch);
+		enemigoA.render(delta, batch);
+		enemigoB.render(delta, batch);
+		enemigoC.render(delta, batch);
+		enemigoD.render(delta, batch);
+		enemigoE.render(delta, batch);
+		enemigoF.render(delta, batch);
+		enemigoG.render(delta, batch);
+		enemigoH.render(delta, batch);
+		enemigoI.render(delta, batch);
+		enemigoJ.render(delta, batch);
+		enemigoK.render(delta, batch);
+		enemigoL.render(delta, batch);
+		enemigoM.render(delta, batch);
+		enemigoN.render(delta, batch);
+		enemigoO.render(delta, batch);
+		enemigoP.render(delta, batch);
+		enemigoQ.render(delta, batch);
+		
 		manejoEntrada(delta);
 		
 		// draw box2d world
-		b2dr.render(mundo, camara.combined);
+		//b2dr.render(mundo, camara.combined);
 		//seguir con la camara
 		camara.position.set(heroe.getCuerpo().getPosition().x,heroe.getCuerpo().getPosition().y,camara.position.z);
 		
@@ -138,12 +224,16 @@ public class PantallaPlay extends PantallaAbstracta implements InputProcessor {
 		findejuego();
 		
 		
-		//System.out.println("x"+heroe.getCuerpo().getPosition().x+"  y"+heroe.getCuerpo().getPosition().y);
+		System.out.println("x"+heroe.getCuerpo().getPosition().x+"  y"+heroe.getCuerpo().getPosition().y);
 		
 	}
 	
 	public void findejuego(){
 		if(!lecheViva && !papelVivo && !harinaViva){
+			Pantallas.juego.setScreen(Pantallas.PANTALLAVICTORIA);
+			musica.pause();
+		}
+		if (gestorColiciones.getMuerte()) {
 			Pantallas.juego.setScreen(Pantallas.FINDEJUEGO);
 			musica.pause();
 		}
@@ -160,18 +250,21 @@ public class PantallaPlay extends PantallaAbstracta implements InputProcessor {
         		mundo.destroyBody(b);
         		harina.dispose();
         		hud.setObjetosRestantes(hud.getObjetosRestantes()-1);
+        		hud.setHarinarecoj(true);
         	}
         		if(papel.getCuerpo() == b){
             		papelVivo=false;
             		mundo.destroyBody(b);
             		papel.dispose();
             		hud.setObjetosRestantes(hud.getObjetosRestantes()-1);
+            		hud.setPapelrecoj(true);
         		}
             		if(leche.getCuerpo() == b){
                 		lecheViva=false;
                 		mundo.destroyBody(b);
                 		leche.dispose();
                 		hud.setObjetosRestantes(hud.getObjetosRestantes()-1);
+                		hud.setLecherecoj(true);
             		}
         	
         	

@@ -8,16 +8,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.shortage.entidades.BotonSalir;
 import com.shortage.game.Shortage;
 
-public class PantallaFindeJuego extends PantallaAbstracta  {
+public class PantallaVictoria extends PantallaAbstracta {
 	
 	private static SpriteBatch batch;
 	private Texture fondo;
 	private BotonSalir botonjugar;
 	
-	public PantallaFindeJuego(Shortage game) {
+	public PantallaVictoria(Shortage game) {
 
 		super(game);
-		fondo = new Texture(Gdx.files.internal("juegoterminadoTexture.png"));
+		fondo = new Texture(Gdx.files.internal("imagen-leopoldo.jpg"));
 		
 	}
 
@@ -26,8 +26,9 @@ public class PantallaFindeJuego extends PantallaAbstracta  {
 		
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		botonjugar.update();
 		batch.begin();
-		batch.draw(fondo, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());	
+		batch.draw(fondo, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());		
 		botonjugar.draw(batch);
 		batch.end();
 		saliralMenu();
@@ -43,7 +44,7 @@ public class PantallaFindeJuego extends PantallaAbstracta  {
 	public void show() {
 		// TODO Auto-generated method stub
 		batch= Shortage.getBatch();
-		botonjugar=new BotonSalir(300,100);
+		botonjugar=new BotonSalir(300,50);
 		
 		
 	}
@@ -75,12 +76,11 @@ public class PantallaFindeJuego extends PantallaAbstracta  {
 	
 public void saliralMenu(){
 		
-	
+		if(Gdx.input.isKeyPressed(Keys.ESCAPE)||Gdx.input.isKeyPressed(Keys.BACK)){
+			Pantallas.juego.setScreen(Pantallas.MENUPRINCIPAL);
+			
+		}
 	}
-
-	
-	
-	
 	
 
 }

@@ -1,0 +1,16 @@
+create  database if not exists shortage;
+use shortage;
+
+create table if not exists usuario(id int PRIMARY KEY AUTO_INCREMENT, 
+nombre varchar(20) UNIQUE not null, 
+clave varchar(20) not null, puntajemayor int default 0,
+constraint valorpuntmay check (puntajemayor>=0)  );
+
+insert into usuario(nombre, clave) values ('root', 'root');
+insert into usuario(nombre, clave) values ('jesus', '0000');
+insert into usuario(nombre, clave) values ('cardozo', '0000');
+insert into usuario(nombre, clave) values ('freddy', '0000');
+
+
+
+

@@ -7,6 +7,7 @@ import com.shortage.pantallas.PantallaFindeJuego;
 import com.shortage.pantallas.PantallaIniciodeSesion;
 import com.shortage.pantallas.PantallaPlay;
 import com.shortage.pantallas.PantallaRegistrodeUsuario;
+import com.shortage.pantallas.PantallaVictoria;
 import com.shortage.pantallas.Pantallas;
 
 public class Shortage extends Game {
@@ -24,9 +25,12 @@ public class Shortage extends Game {
 		Pantallas.FINDEJUEGO= new PantallaFindeJuego(this);
 		Pantallas.PANTALLAINICIODESESION = new PantallaIniciodeSesion(this);
 		Pantallas.PANTALLAREGISTRODEUSUARIO = new PantallaRegistrodeUsuario(this);
+		Pantallas.PANTALLAVICTORIA= new PantallaVictoria(this);
 			
-	setScreen(Pantallas.PANTALLAINICIODESESION);
-		//setScreen(Pantallas.PANTALLAREGISTRODEUSUARIO);
+	 	setScreen(Pantallas.PANTALLAINICIODESESION);
+	 	//setScreen(Pantallas.PANTALLAJUEGO);	
+		//setScreen(Pantallas.FINDEJUEGO);
+		
 	}
 	
 	

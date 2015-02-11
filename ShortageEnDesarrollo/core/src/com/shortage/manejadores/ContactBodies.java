@@ -15,11 +15,13 @@ public class ContactBodies implements ContactListener{
 	private Body body1, body2;
 	private boolean estado;
 	private Array<Body> bodiesDelete;
+	private boolean muerte;
 
 	
 	public ContactBodies(){
 		super();
 		bodiesDelete= new Array<Body>();
+		muerte=false;
 	}
 	
 	public boolean getestado(){return estado;}
@@ -50,6 +52,19 @@ public class ContactBodies implements ContactListener{
 			bodiesDelete.add(fb.getBody());
 			
 		}
+		
+		
+		if(fa.getUserData() != null && fa.getUserData().equals("Enemigo")){
+			
+			muerte=true;
+		}
+		
+		if(fb.getUserData() != null && fb.getUserData().equals("Enemigo")) {
+			
+			muerte=true;
+		}
+		
+		
 	}
 
 
@@ -100,5 +115,12 @@ public class ContactBodies implements ContactListener{
 		
 	}
 	
+	public boolean getMuerte() {
+		return muerte;
+	}
+
+	public void setMuerte(boolean muerte) {
+		this.muerte = muerte;
+	}
 
 }

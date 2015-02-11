@@ -2,6 +2,7 @@ package com.shortage.hud;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -14,6 +15,9 @@ public class Hud {
 	private int objetosRestantes;
 	private BitmapFont objetosRestantesText;
 	private SpriteBatch batch;
+	private Texture harina, leche, papel, harinatach, lechetach, papeltach;
+	private boolean harinarecoj, lecherecoj, papelrecoj;
+	
 	
 
 	public Hud() {
@@ -21,8 +25,19 @@ public class Hud {
 		objetosRestantes = 3;
 		objetosRestantesText = new BitmapFont();
 		objetosRestantesText.setScale(1.5f);
-		objetosRestantesText.setColor(Color.BLUE);
+		objetosRestantesText.setColor(Color.WHITE);
 		batch = new SpriteBatch();
+		harina = new Texture(Gdx.files.internal("harinaTextura.png"));
+		leche = new Texture(Gdx.files.internal("lecheTextura.png"));
+		papel = new Texture(Gdx.files.internal("papelTextura.png"));
+		harinatach= new Texture(Gdx.files.internal("harinaTexturaTachada.png"));
+		lechetach = new Texture(Gdx.files.internal("lecheTexturaTachada.png"));
+		papeltach= new Texture(Gdx.files.internal("papelTexturaTachada.png"));
+		
+		harinarecoj= false;
+		lecherecoj=false;
+		papelrecoj=false;
+		
 	}
 
 	public void render(float delta) {
@@ -44,12 +59,51 @@ public class Hud {
 		objetosRestantesText.draw(
 				batch,
 				"Productos por Recoger:   "
-						+ Integer.toString(objetosRestantes), 50, 50);
+						+ Integer.toString(objetosRestantes), 50, 30);
 		objetosRestantesText.draw(batch,
-				"Tiempo :   " +min +":"+ sec, 350, 50);
+				"Tiempo :   " +min +":"+ sec, 650, 30);
+		if(!isHarinarecoj())
+		batch.draw(harina, 50,50);
+		else
+			batch.draw(harinatach, 50,50);
+		
+		if(!isLecherecoj())
+		batch.draw(leche, 100,50);
+		else
+			batch.draw(lechetach, 100, 50);
+		
+		if(!isPapelrecoj())
+		batch.draw(papel, 150,50);
+		else
+			batch.draw(papeltach, 150, 50);
+		
 		batch.end();
 	}
 
+	public boolean isHarinarecoj() {
+		return harinarecoj;
+	}
+
+	public void setHarinarecoj(boolean harinarecoj) {
+		this.harinarecoj = harinarecoj;
+	}
+
+	public boolean isLecherecoj() {
+		return lecherecoj;
+	}
+
+	public void setLecherecoj(boolean lecherecoj) {
+		this.lecherecoj = lecherecoj;
+	}
+
+	public boolean isPapelrecoj() {
+		return papelrecoj;
+	}
+
+	public void setPapelrecoj(boolean papelrecoj) {
+		this.papelrecoj = papelrecoj;
+	}
+	
 
 
 	public int getObjetosRestantes() {

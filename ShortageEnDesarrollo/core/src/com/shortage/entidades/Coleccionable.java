@@ -58,7 +58,7 @@ public class Coleccionable {
         fixture = cuerpo.createFixture(fixturedef);
         fixture.setUserData("Coleccionable");
         shape.dispose();
-		
+        cuerpo.setFixedRotation(true);
         
 		return cuerpo;
 	}
